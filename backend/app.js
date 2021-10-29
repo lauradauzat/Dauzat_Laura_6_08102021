@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -5,7 +6,7 @@ const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 const path = require('path');
 
-mongoose.connect('mongodb+srv://lauradauzat:10Thousand_Hours@cluster0.somwr.mongodb.net/Cluster0?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_NAME}?retryWrites=true&w=majority`,
 
   { useNewUrlParser: true,
     useUnifiedTopology: true })

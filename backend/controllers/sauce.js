@@ -50,8 +50,7 @@ exports.createSauce = (req, res, next) => {
   const sauce = new Sauce({
     ...sauceObject,
      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-     usersLiked: '',
-     usersDisliked: ''
+
   });
  sauce.save()
     .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
@@ -100,17 +99,15 @@ exports.deleteSauce = (req, res, next) => {
 exports.likeStatus = (req, res, next) => {
   const sauceObject = { ...req.body };
   let like = req.body.like; 
-  let dislike = req.body.dislikes; 
   let userId = req.body.userId; 
   let sauce = req.params.id; 
-  let usersLiked = req.params.usersLiked; 
-  let usersDisiked = req.params.usersDisiked; 
+
 
 
   switch (like) {
     case 1 :
        //si like est a 1, ajouter un like et ajouter l'id de l'utilisateur dans l'array Userslike
-        Sauce.updateOne({ _id: sauce }, { $inc: { likes: like++ }, $push: { usersLiked: userId } })
+        Sauce.updateOne({ _id: sauce }, { $inc: { likes: 1 }, $push: { usersLiked: userId } })
           .then(() => res.status(200).json({ message: `Like Added` }))
           .catch((error) => res.status(400).json({ error }))
             
@@ -121,7 +118,7 @@ exports.likeStatus = (req, res, next) => {
            .then((sauce) => {
              //si l'utilisateur aiment la sauce (id présent dans usersLiked) retirer son id de l'array et retirer un like
             if (sauce.usersLiked.includes(userId)) { 
-              Sauce.updateOne({ _id: sauce }, { $pull: { usersLiked: userId }, $inc: { likes: like-- } })
+              Sauce.updateOne({ _id: sauce }, { $pull: { usersLiked: userId }, $inc: { likes: -1 } })
                 .then(() => res.status(200).json({ message: `Cancel Like` }))
                 .catch((error) => res.status(400).json({ error }))
             }
