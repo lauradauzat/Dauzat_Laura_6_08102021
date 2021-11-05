@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require("helmet");
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const sauceRoutes = require('./routes/sauce');
@@ -16,7 +17,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${
 
 
 const app = express();
-
+app.use(helmet());
 
 
 app.use((req, res, next) => {
